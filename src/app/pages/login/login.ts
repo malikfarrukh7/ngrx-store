@@ -20,17 +20,27 @@ import { Component } from "@angular/core";
       <div>
       <label for ="password" class= "block text-sm font-medium text-slate-700 mb-2"> Password</label>
       <input type="password"
-       id = "password">
+       id = "password"
+       autocomplete = "current-password"
+       class  = "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"
+       placeholder= "Enter your password">
 
       </div>
 
+      <button type="submit" class= "w-full">Sign in</button>
+      <p class= "text-slate-500 font-medium underline"> Don
+
     </form>
 
-
-
   </div>`,
+
+
+
+
   host:{
+
     class: 'min-h-screen flex items-center justify-center bg-slate-100 p-4'
   }
+
 })
 export class Login {}
