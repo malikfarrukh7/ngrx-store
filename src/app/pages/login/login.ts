@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Button } from "../../shared/components/button";
 
 @Component({
   selector: "app-login",
@@ -27,8 +28,10 @@ import { Component } from "@angular/core";
 
       </div>
 
-      <button type="submit" class= "w-full">Sign in</button>
-      <p class= "text-slate-500 font-medium underline"> Don
+      <button appButton type="submit" class= "w-full">Sign in</button>
+      <p class= "text-slate-500 font-medium underline"> Don't have an account?
+        <a class="text-slate-500 front-medium underline">Register</a>
+</p>
 
     </form>
 
@@ -40,7 +43,8 @@ import { Component } from "@angular/core";
   host:{
 
     class: 'min-h-screen flex items-center justify-center bg-slate-100 p-4'
-  }
+  },
+  imports: [Button]
 
 })
 export class Login {}
