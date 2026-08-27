@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Button } from "../../shared/components/button";
 
 @Component({
   selector: "app-login",
@@ -20,17 +21,30 @@ import { Component } from "@angular/core";
       <div>
       <label for ="password" class= "block text-sm font-medium text-slate-700 mb-2"> Password</label>
       <input type="password"
-       id = "password">
+       id = "password"
+       autocomplete = "current-password"
+       class  = "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"
+       placeholder= "Enter your password">
 
       </div>
 
+      <button appButton type="submit" class= "w-full">Sign in</button>
+      <p class= "text-slate-500 font-medium underline"> Don't have an account?
+        <a class="text-slate-500 front-medium underline">Register</a>
+</p>
+
     </form>
 
-
-
   </div>`,
+
+
+
+
   host:{
+
     class: 'min-h-screen flex items-center justify-center bg-slate-100 p-4'
-  }
+  },
+  imports: [Button]
+
 })
 export class Login {}
