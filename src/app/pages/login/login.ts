@@ -29,7 +29,7 @@ import { Button } from "../../shared/components/button";
       </div>
 
       <button appButton type="submit" class= "w-full">Sign in</button>
-      <p class= "text-slate-500 font-medium underline"> Don't have an account?
+      <p class= "text-sm text-center text-slate-500 mt-4"> Don't have an account?
         <a class="text-slate-500 front-medium underline">Register</a>
 </p>
 
