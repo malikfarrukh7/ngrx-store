@@ -1,9 +1,13 @@
-import { Component } from "@angular/core";
+import { Component ,signal} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Button } from "../../shared/components/button";
+import {form, Field, FormField, required, minLength, validate } from "@angular/forms/signals";
+import { FormsModule } from "@angular/forms";
+import { FormErrors } from "../../shared/components/form-errors";
+import { registerSchema } from "./register-schema";
 
 @Component({
-  imports: [RouterLink, Button],
+  imports: [RouterLink, Button, FormField, FormsModule,FormErrors],
   selector: "app-register",
   template: `
   <div  class= "w-full max-w-md p-8 bg-white rounded-2xl shadow-xl">
@@ -17,7 +21,10 @@ import { Button } from "../../shared/components/button";
       id= "username"
       type="text"
       autocomplete="username"
+      [formField]="registerForm.username"
+      placeholder="username"
       class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"/>
+      <app-form-error  [control]="registerForm.username()"></app-form-error>
     </div>
 
     <div>
@@ -26,8 +33,10 @@ import { Button } from "../../shared/components/button";
     <input
     id= "email"
     type = "email"
+    [formField]="registerForm.email"
     class = "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"
     placeholder= "Enter you username"/>
+    <app-form-error  [control]="registerForm.email()"></app-form-error>
 
     </div>
 
@@ -39,9 +48,11 @@ import { Button } from "../../shared/components/button";
     id="password"
     type="password"
     autocomplete="current-password"
+    [formField]="registerForm.password"
     class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"
     placeholder="Enter your Password"
     />
+    <app-form-error  [control]="registerForm.password()"></app-form-error>
     </div>
 
     <div>
@@ -52,14 +63,16 @@ import { Button } from "../../shared/components/button";
     id = "comfirmPassword"
      type="Password"
      autocomplete= "current-Password"
+     [formField]="registerForm.confirmPassword"
      class = "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring0slate-900 focus:border-transparent outline-none transiton-shadow"
      placeholder="Enter your password"
     />
+    <app-form-error  [control]="registerForm.confirmPassword()"></app-form-error>
 
     </div>
 
 
-    <button appButton type= "submit" class="w-full" >Register</button>
+    <button appButton  [disabled]="registerForm().invalid()"  (click)="onSubmit($event)" type= "submit"   class="w-full" >Register</button>
 
     <p class= "text-center text-slate-500 mt-4">
     Already have an account?
@@ -79,4 +92,25 @@ import { Button } from "../../shared/components/button";
 
 
 })
-export class Register {}
+export class Register {
+
+registerModel = signal({
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+});
+
+registerForm = form(this.registerModel, registerSchema);
+
+  onSubmit(event: Event){
+    event.preventDefault();
+    if (this.registerForm().valid()){
+      console.log('Register Data:', this.registerForm().value());
+
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  }
