@@ -1,10 +1,20 @@
 import { Component, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { form, Field, FormField } from "@angular/forms/signals";
+import { form, Field, FormField, required, minLength } from "@angular/forms/signals";
 import { Button } from "../../shared/components/button";
 import { FormsModule } from "@angular/forms";
+import { FormErrors } from "../../shared/components/form-errors";
 
 @Component({
+
+    imports: [
+    Button,
+    RouterLink,
+    FormField,
+    FormsModule,
+    FormErrors
+  ],
+
   selector: "app-login",
 
   template: `
@@ -33,6 +43,13 @@ import { FormsModule } from "@angular/forms";
             class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"
             placeholder="Enter your username"
           />
+
+          <app-form-error  [control] ="loginForm.username()" ></app-form-error>
+          <!-- @if(!loginForm.username().valid() && loginForm.username().touched()){
+            @for(error of loginForm.username().errors(); track error.kind){
+              <p class ="text-sm text-red-600 mt-1">{{error.message}}</p>
+            }
+          } -->
         </div>
 
         <!-- Password -->
@@ -52,6 +69,15 @@ import { FormsModule } from "@angular/forms";
             class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition-shadow"
             placeholder="Enter your password"
           />
+
+          <app-form-error [control]="loginForm.password()"></app-form-error>
+
+           <!-- @if(!loginForm.password().valid() && loginForm.password().touched()){
+            @for(error of loginForm.password().errors(); track error.kind){
+              <p class ="text-sm text-red-600 mt-1">{{error.message}}</p>
+            }
+          } -->
+
         </div>
 
         <!-- Submit -->
@@ -81,12 +107,7 @@ import { FormsModule } from "@angular/forms";
     class: "min-h-screen flex items-center justify-center bg-slate-100 p-4"
   },
 
-  imports: [
-    Button,
-    RouterLink,
-    FormField,
-    FormsModule
-  ]
+
 })
 export class Login {
 
@@ -95,7 +116,12 @@ export class Login {
     password: ""
   });
 
-  loginForm = form(this.loginModel);
+  loginForm = form(this.loginModel, (rootPath)=>{
+    required (rootPath.username,{message: 'Username is required'});
+      required(rootPath.password, {message: 'Password is required'});
+      minLength(rootPath.password, 6 , {message: 'Password must be at least 6 characters long'});
+
+  });
 
   onSubmit(event: Event) {
     event.preventDefault();
