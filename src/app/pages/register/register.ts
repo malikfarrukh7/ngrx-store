@@ -1,10 +1,14 @@
-import { Component ,signal} from "@angular/core";
+import { Component ,inject,signal} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Button } from "../../shared/components/button";
 import {form, Field, FormField, required, minLength, validate } from "@angular/forms/signals";
 import { FormsModule } from "@angular/forms";
 import { FormErrors } from "../../shared/components/form-errors";
 import { registerSchema } from "./register-schema";
+import { Store } from "@ngrx/store";
+import { authFeatures } from "../../shared/store/auth-feature";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { authActions } from "../../shared/store/auth-actions";
 
 @Component({
   imports: [RouterLink, Button, FormField, FormsModule,FormErrors],
@@ -72,7 +76,8 @@ import { registerSchema } from "./register-schema";
     </div>
 
 
-    <button appButton  [disabled]="registerForm().invalid()"  (click)="onSubmit($event)" type= "submit"   class="w-full" >Register</button>
+    <button appButton  [disabled]="registerForm().invalid()"  (click)="onSubmit($event)" type= "submit"  [disabled]="registerForm().invalid() ||isLoading()"  class="w-full" >
+      {{isLoading() ? 'Registering...' : 'Register'}}</button>
 
     <p class= "text-center text-slate-500 mt-4">
     Already have an account?
@@ -103,14 +108,17 @@ registerModel = signal({
 
 registerForm = form(this.registerModel, registerSchema);
 
+  private readonly  store = inject(Store);
+  protected readonly isLoading = toSignal(this.store.select(authFeatures.selectIsloading));
+
+
   onSubmit(event: Event){
     event.preventDefault();
-    if (this.registerForm().valid()){
-      console.log('Register Data:', this.registerForm().value());
+    const id = Date.now();
+    const {confirmPassword, ...rest} = this.registerForm().value();
+    const registerRequest = {id, ...rest};
+    this.store.dispatch(authActions.register(registerRequest));
 
-    } else {
-      console.log('Form is invalid');
-    }
   }
 
   }
