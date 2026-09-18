@@ -1,15 +1,68 @@
+import { LucideAngularModule, LogOut,User,ShoppingCart} from 'lucide-angular';
 import { Component } from "@angular/core";
+import { RouterLink } from "@angular/router"
+import {Button} from "../../shared/components/button";
+
 
 @Component({
   selector: 'app-header',
+  imports:[Button, RouterLink,LucideAngularModule],
   template: `
-  <header>
-    <h1>My Angular App</h1>
-  </header>
+    <div class="sticky top-0 z-50 w-full px-4 py-3 bg-slate-900 text-white shadow-lg">
+      <nav class="container mx-auto flex items-center justify-between px-10">
+        <a routerLink="/" class="text-xl font-bold tracking-tight">NgrxStore</a>
+
+        <div class="flex items-center gap-4">
+          <button
+            appButton
+            variant="ghost"
+            type="button"
+
+            class="text-white hover:text-gray-300 hover:bg-white/10"
+          >
+          <lucide-icon [img]="icons.LogOut" class="size-4 mr2"/>
+            Logout
+          </button>
+          <button
+            routerLink="/profile"
+            appButton
+            variant="ghost"
+            type="button"
+            class="text-white hover:bg-white/10"
+          >
+          <lucide-icon [img]="icons.User" class="size-4 mr2"/>
+            Profile
+          </button>
+          <button
+            appButton
+            variant="ghost"
+            type="button"
+            class="relative text-white hover:bg-white/10"
+            routerLink="/cart"
+          >
+
+          <lucide-icon [img]="icons.ShoppingCart" class="size-4 mr2"/>
+
+
+          <span
+              class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-amber-500 text-xs font-medium rounded-full"
+            >
+              10
+            </span>
+
+          </button>
+
+        </div>
+      </nav>
+    </div>
   `
 })
 
 export class Header {
+
+
+  protected readonly icons ={LogOut,User,ShoppingCart}
+
   constructor() {
     console.log('Header constructor called');
   }

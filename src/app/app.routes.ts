@@ -15,6 +15,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/main-layout').then(m => m.MainLayout),
     children: [
 
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo : 'products'
+      },
+
        {
     path: 'products',
     loadComponent: () => import('./pages/products/products').then(m => m.Products)
