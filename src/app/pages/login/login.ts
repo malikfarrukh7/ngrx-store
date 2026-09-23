@@ -1,9 +1,13 @@
-import { Component, signal } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { form, Field, FormField, required, minLength } from "@angular/forms/signals";
 import { Button } from "../../shared/components/button";
 import { FormsModule } from "@angular/forms";
 import { FormErrors } from "../../shared/components/form-errors";
+import { Store } from "@ngrx/store";
+import { authActions } from "../../shared/store/auth-actions";
+import { authFeatures } from "../../shared/store/auth-feature";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
 
@@ -83,10 +87,13 @@ import { FormErrors } from "../../shared/components/form-errors";
         <!-- Submit -->
         <button
           appButton
+          size="lg"
+
           type="submit"
           class="w-full"
+          [disabled]="loginForm().invalid() || isLoading()"
         >
-          Sign in
+          {{isLoading() ? 'Signing in...' : 'Sign in'}}
         </button>
 
         <p class="text-sm text-center text-slate-500 mt-4">
@@ -112,8 +119,8 @@ import { FormErrors } from "../../shared/components/form-errors";
 export class Login {
 
   loginModel = signal({
-    username: "",
-    password: ""
+    username: "johnd",
+    password: "m38rmF$"
   });
 
   loginForm = form(this.loginModel, (rootPath)=>{
@@ -123,11 +130,14 @@ export class Login {
 
   });
 
+  private readonly store = inject(Store);
+  protected readonly isLoading = toSignal(this.store.select(authFeatures.selectIsloading));
+
   onSubmit(event: Event) {
     event.preventDefault();
 
     if (this.loginForm().valid()) {
-      console.log("Login Data:", this.loginForm().value());
+      this.store.dispatch(authActions.login(this.loginForm().value()));
     } else {
       console.log("Form is invalid");
     }
