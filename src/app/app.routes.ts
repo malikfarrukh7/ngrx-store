@@ -1,4 +1,8 @@
+import { provideState } from '@ngrx/store';
 import { Routes } from '@angular/router';
+import { productFeature } from './pages/products/store/product-feature';
+import { provideEffects } from '@ngrx/effects';
+import  * as productEffect from './pages/products/store/product-effect';
 
 export const routes: Routes = [
 
@@ -23,7 +27,8 @@ export const routes: Routes = [
 
        {
     path: 'products',
-    loadComponent: () => import('./pages/products/products').then(m => m.Products)
+    loadComponent: () => import('./pages/products/products').then(m => m.Products),
+    providers:[provideState(productFeature),provideEffects(productEffect)],
   },
 
   {
